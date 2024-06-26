@@ -50,7 +50,5 @@ npm start
 ```
 
 ### 4. Access Documentation
-**Postman** :  https://documenter.getpostman.com/view/19880774/2sA3drHEi9
-**Swagger** : {{server-url}}:3000/api-docs
-
-
+- **Postman** :  https://documenter.getpostman.com/view/19880774/2sA3drHEi9
+- **Swagger** : {{server-url}}:3000/api-docs
