@@ -1,0 +1,239 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "User Microservices API",
+    "description": "API documentation for User Microservices"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Create a new user and account login, and send user data to Kafka",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User data and account data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserAccount"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/accountNumber/{accountNumber}": {
+      "get": {
+        "summary": "Get user by account number",
+        "description": "Retrieve user information by account number",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/registrationNumber/{registrationNumber}": {
+      "get": {
+        "summary": "Get user by registration number",
+        "description": "Retrieve user information by registration number",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "registrationNumber",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/loginByLastLoginDateTime": {
+      "get": {
+        "summary": "Get account login by last login date time",
+        "description": "Retrieve account login information filtered by last login date time greater than 3 days",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Accounts retrieved",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountLogin"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "UserAccount": {
+      "type": "object",
+      "required": [
+        "userData",
+        "accountData"
+      ],
+      "properties": {
+        "userData": {
+          "$ref": "#/definitions/User"
+        },
+        "accountData": {
+          "$ref": "#/definitions/AccountLogin"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "userId",
+        "fullName",
+        "accountNumber",
+        "emailAddress",
+        "registrationNumber"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "registrationNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "AccountLogin": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "userName",
+        "password"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "lastLoginDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
